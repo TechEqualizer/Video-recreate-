@@ -64,9 +64,10 @@ For each reference:
 python3 tools/analyze_reference.py projects/<slug>/refs/*.mp4
 ```
 
-This writes `analysis.json`, `contact_sheet.jpg`, a keyframe per shot and `report.md` per reference. The numbers are free; the eyes are the work:
+This writes `analysis.json`, `contact_sheet.jpg`, `sheet_dense.jpg`, a keyframe per shot and `report.md` per reference. The numbers are free; the eyes are the work:
 
-1. Open every `contact_sheet.jpg` and the keyframes. Read frames either side of each cut (`ffmpeg -ss <t-0.2> -i ref.mp4 -frames:v 8 -vf fps=30,scale=360:-2 f_%02d.jpg`) to see transitions, speed ramps, flashes and type entrances.
+0. If the reference ends on a legal card, logo hold or black, trim it (`ffmpeg -i ref.mp4 -t <body_end> ref_body.mp4`), re-analyze, and fuse from the body: tails distort brightness and stillness targets.
+1. Open `sheet_dense.jpg` first (it shows text builds and continuous moves the cut detector can't), then `contact_sheet.jpg` and the keyframes. A long "shot" that changes a lot is usually a continuous move (carousel, orbit) or a missed cut: look at 8 fps to tell which. Read frames either side of each cut (`ffmpeg -ss <t-0.2> -i ref.mp4 -frames:v 8 -vf fps=30,scale=360:-2 f_%02d.jpg`) to see transitions, speed ramps, flashes and type entrances.
 2. Fill the empty column of `report.md` per shot: shot size and FOV, subject, camera move and speed, light (key direction, Kelvin), type on screen and how it animates, transition out.
 3. Name the 2 to 4 **signature moves** per reference: the things that make it feel like itself (whip pans on the beat, macro inserts, a 1-frame white flash, giant type behind the subject, a match-cut product drop).
 4. When a reference needs semantic reading (what happens, what's said) and `watch` cannot transcribe it, Higgsfield `video_analysis_create` (costs credits, ask first; short clips analyse best).

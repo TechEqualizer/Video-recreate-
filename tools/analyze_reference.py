@@ -7,6 +7,7 @@ Usage:
 Writes into DIR (default: <video dir>/<video stem>.analysis/):
     analysis.json      every number the build and the parity check use
     contact_sheet.jpg  one keyframe per shot, timestamped
+    sheet_dense.jpg    ~120 timestamped frames at a fixed rate (beats, text builds, transitions)
     shots/NNN.jpg      the keyframe of each shot (mid-point)
     report.md          a readable summary to start the shot-by-shot breakdown
 
@@ -60,6 +61,33 @@ def detect_cuts(v, thr):
         if c > 0.1 and (not merged or c - merged[-1] > 0.25):
             merged.append(round(c, 3))
     return merged
+
+
+def detect_cuts_diff(v, rate=15):
+    """Second detector: isolated spikes in frame difference. Catches cuts between similar-looking
+    shots (white text card -> white product shot) that ffmpeg's scene score misses, while ignoring
+    steady motion and small text builds."""
+    raw = sh(["ffmpeg", "-v", "error", "-i", str(v), "-map", "0:v:0", "-vf", f"fps={rate},scale=96:54,format=gray",
+              "-f", "rawvideo", "-"]).stdout
+    a = np.frombuffer(raw, np.uint8).reshape(-1, 54, 96).astype(np.float32)
+    if len(a) < 3:
+        return []
+    d = np.abs(np.diff(a, axis=0)).mean(axis=(1, 2))
+    cuts = []
+    for i in range(len(d)):
+        nb = np.concatenate([d[max(0, i - 3):i], d[i + 1:i + 4]])
+        base = float(np.median(nb)) if len(nb) else 0.0
+        if d[i] > 4.0 and d[i] > 3 * base + 1.5:
+            cuts.append(round((i + 1) / rate, 3))
+    return cuts
+
+
+def merge_cuts(*lists, gap=0.25):
+    out = []
+    for c in sorted(x for l in lists for x in l):
+        if c > 0.1 and (not out or c - out[-1] > gap):
+            out.append(c)
+    return out
 
 
 def decode_frames(v, fps):
@@ -176,7 +204,7 @@ def analyze(v, out, thr, fps):
     (out / "shots").mkdir(exist_ok=True)
     meta = probe(v)
     dur = meta["duration_s"]
-    cuts = detect_cuts(v, thr)
+    cuts = merge_cuts(detect_cuts(v, thr), detect_cuts_diff(v))
     frames = decode_frames(v, fps)
     gray = frames.mean(-1)
     diff = np.abs(np.diff(gray, axis=0)).mean(axis=(1, 2)) if len(gray) > 1 else np.zeros(1)
@@ -233,8 +261,19 @@ def analyze(v, out, thr, fps):
     contact_sheet([out / s["keyframe"] for s in shots],
                   [f'#{s["n"]} {s["start_s"]:.2f}s ({s["dur_s"]:.1f}s) {s["camera"]}' for s in shots],
                   out / "contact_sheet.jpg")
+    dense_sheet(v, dur, out / "sheet_dense.jpg")
     write_report(result, out / "report.md")
     return result
+
+
+def dense_sheet(v, dur, path, frames=120, cols=12):
+    """Timestamped frames at a fixed rate (~120 for the whole video): the best single view of beats,
+    text builds and transitions that one-keyframe-per-shot misses."""
+    rate = max(0.5, min(4.0, frames / max(dur, 1)))
+    rows = int(np.ceil(dur * rate / cols))
+    sh(["ffmpeg", "-v", "error", "-y", "-i", str(v), "-vf",
+        f"fps={rate},scale=240:-2,drawtext=text='%{{pts\\:hms}}':x=4:y=4:fontsize=14:fontcolor=red:box=1,tile={cols}x{rows}",
+        "-frames:v", "1", str(path)])
 
 
 def write_report(r, path):
