@@ -90,6 +90,24 @@ def merge_cuts(*lists, gap=0.25):
     return out
 
 
+def jerkiness(v, cuts, rate=30):
+    """Smoothness: how abruptly motion energy changes from frame to frame inside shots
+    (cuts excluded), relative to the average motion. Lower = smoother. Strobing pans,
+    wobbling springs and frame-rate judder all raise it."""
+    raw = sh(["ffmpeg", "-v", "error", "-i", str(v), "-map", "0:v:0", "-vf", f"fps={rate},scale=160:90,format=gray",
+              "-f", "rawvideo", "-"]).stdout
+    a = np.frombuffer(raw, np.uint8).reshape(-1, 90, 160).astype(np.float32)
+    if len(a) < 4:
+        return None
+    d = np.abs(np.diff(a, axis=0)).mean(axis=(1, 2))
+    t = (np.arange(len(d)) + 1) / rate
+    keep = np.ones(len(d), bool)
+    for c in cuts:
+        keep &= np.abs(t - c) > 0.1
+    d = d[keep]
+    return round(float(np.abs(np.diff(d)).mean() / (d.mean() + 1e-6)), 3)
+
+
 def decode_frames(v, fps):
     raw = sh(["ffmpeg", "-v", "error", "-i", str(v), "-map", "0:v:0", "-vf", f"fps={fps},scale={W}:{H}",
               "-pix_fmt", "rgb24", "-f", "rawvideo", "-"]).stdout
@@ -250,6 +268,7 @@ def analyze(v, out, thr, fps):
         motion_by_quarter=[round(float(x.mean()), 2) if len(x) else 0 for x in q],
         **color_stats(frames),
     )
+    m["jerk"] = jerkiness(v, cuts)
     # motion relative to contrast: comparable across bright and dark looks
     m["motion_rel"] = round(m["motion"] / m["contrast"], 3) if m["contrast"] else None
     m["energy_shape"] = ("front-loaded" if m["motion_by_quarter"][0] >= max(m["motion_by_quarter"]) * 0.9 else

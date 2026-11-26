@@ -8,7 +8,7 @@ Usage:
 import json, sys
 
 AT_LEAST = {"cuts_on_beat_pct"}  # more is better
-AT_MOST = {"pct_static", "longest_still_s"}  # less is better
+AT_MOST = {"pct_static", "longest_still_s", "jerk"}  # less is better
 from pathlib import Path
 
 

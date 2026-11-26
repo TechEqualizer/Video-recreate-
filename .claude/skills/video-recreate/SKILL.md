@@ -139,6 +139,17 @@ Hand off to `ad-engine` from its section 5 (realism system) and section 6 (pipel
 
 Every Seedance prompt goes through `higgsfield-seedance-prompt`, carrying the likeness element, product references and the spec's light, grade and lens lines.
 
+## 7b. Smoothness (coded motion)
+
+Dw's first animatic "did not feel smooth"; measured jerk was 25% above the reference. Rules for every coded build:
+
+- **Render 60 fps with motion blur.** Average 3 sub-frames across a 180-degree shutter per output frame (`build/render.js --sub 3 --shutter 0.5`). Crisp frames with no blur strobe on any fast move.
+- **Cap speeds.** Pans and drifts no faster than one screen-width per ~6 s; anything faster must be blurred and eased. Carousels move at most 3 slots per shot.
+- **Ease both ends.** Entrances decelerate in, exits accelerate out (sine or cubic in-out). Never start a move at full speed (no expo-out from zero on long travels).
+- **Damped springs.** ~3% overshoot (k=9, w=8 in `index.html`); no visible wobble.
+- **Dark-to-bright cuts strobe more.** Keep fast motion away from the first frames after a dark/bright cut.
+- **Measure it.** `jerk` (frame-to-frame change in motion energy within shots, relative to mean motion) is in every analysis and is an at-most target in the Style DNA camera role.
+
 ## 8. Parity: prove it matches
 
 ```bash

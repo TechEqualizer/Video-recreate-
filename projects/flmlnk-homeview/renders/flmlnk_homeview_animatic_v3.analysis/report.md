@@ -22,6 +22,7 @@
 | contrast | 27.9 |
 | saturation | 0.201 |
 | warmth | 7.4 |
+| jerk | 0.166 |
 | motion_rel | 0.2 |
 | energy_shape | mid-peak |
 | tempo_model | cut-driven |

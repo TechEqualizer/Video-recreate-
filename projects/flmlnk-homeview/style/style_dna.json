@@ -87,6 +87,13 @@
     "max": 2.17,
     "n": 1,
     "tolerance": 0.651
+   },
+   "jerk": {
+    "target": 0.131,
+    "min": 0.131,
+    "max": 0.131,
+    "n": 1,
+    "tolerance": 0.013
    }
   },
   "look": {},

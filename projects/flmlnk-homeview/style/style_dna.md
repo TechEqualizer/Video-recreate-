@@ -20,6 +20,7 @@ Target: **30.0 s, 9:16**, tempo model **cut-driven**
 | camera | motion_rel | 0.205 | ±0.051 | 0.205 to 0.205 (n=1) |
 | camera | pct_static | 16.0 | ±8.0 | 16.0 to 16.0 (n=1) |
 | camera | longest_still_s | 2.17 | ±0.651 | 2.17 to 2.17 (n=1) |
+| camera | jerk | 0.131 | ±0.013 | 0.131 to 0.131 (n=1) |
 | sound | lufs | -15.7 | ±2.0 | -15.7 to -15.7 (n=1) |
 | sound | bpm | 125.8 | ±12.58 | 125.8 to 125.8 (n=1) |
 | sound | cuts_on_beat_pct | 32.0 | ±10 | 32.0 to 32.0 (n=1) |
