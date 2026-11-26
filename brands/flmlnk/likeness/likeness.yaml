@@ -1,0 +1,9 @@
+# Filled in by the video-recreate skill after registering the likeness once. Reuse these IDs; don't re-create.
+person: ""
+photos_dir: photos/          # 5 to 20 clear photos: front, three-quarter, profile, even light, no sunglasses
+higgsfield:
+  element_id: ""             # elements_create category=character -> use <<<element_id>>> in Seedance/Kling prompts
+  element_handle: ""
+  soul_id: ""                # show_characters action=train -> soul_2 / soul_cinematic stills only
+  voice_id: ""               # create_voice, only if voice consent = yes
+notes: ""
