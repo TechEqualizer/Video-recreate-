@@ -28,13 +28,13 @@ import numpy as np
 ROLES = ["structure", "pacing", "camera", "look", "sound"]
 DIMS = {
     "pacing": ["cuts_per_10s", "median_shot_s", "mean_shot_s", "shortest_shot_s", "longest_shot_s", "first_cut_s"],
-    "camera": ["pct_shots_camera_moving", "motion", "pct_static", "longest_still_s"],
-    "look": ["brightness", "contrast", "saturation", "warmth"],
+    "camera": ["pct_shots_camera_moving", "motion_rel", "pct_static", "longest_still_s"],
+    "look": ["brightness", "contrast", "saturation", "warmth", "motion"],
     "sound": ["lufs", "bpm", "cuts_on_beat_pct"],
     "structure": ["duration_s"],
 }
 # how far the build may drift from a target before the parity check fails it
-TOL = dict(cuts_per_10s=0.2, median_shot_s=0.25, mean_shot_s=0.25, shortest_shot_s=0.5, longest_shot_s=0.3, first_cut_s=0.5,
+TOL = dict(motion_rel=0.25, cuts_per_10s=0.2, median_shot_s=0.25, mean_shot_s=0.25, shortest_shot_s=0.5, longest_shot_s=0.3, first_cut_s=0.5,
            pct_shots_camera_moving=0.2, motion=0.3, pct_static=0.5, longest_still_s=0.3, brightness=0.15, contrast=0.25,
            saturation=0.25, warmth=None, lufs=None, bpm=0.1, cuts_on_beat_pct=0.25, duration_s=0.15)
 ABS_TOL = dict(warmth=12, lufs=2.0)
@@ -72,7 +72,7 @@ def wstats(pairs):
         return None
     v = np.array([p[0] for p in pairs], float)
     w = np.array([p[1] for p in pairs], float)
-    return dict(target=round(float((v * w).sum() / w.sum()), 2), min=round(float(v.min()), 2), max=round(float(v.max()), 2), n=len(v))
+    return dict(target=round(float((v * w).sum() / w.sum()), 3), min=round(float(v.min()), 3), max=round(float(v.max()), 3), n=len(v))
 
 
 def energy_curve(a, bins=10):
@@ -145,7 +145,7 @@ def main():
         dna["targets"][role] = {k: v for k, v in dna["targets"][role].items() if v}
     for role, d in dna["targets"].items():
         for k, s in d.items():
-            s["tolerance"] = ABS_TOL[k] if k in ABS_TOL else round(max(abs(s["target"]) * TOL[k], MIN_TOL.get(k, 0)), 2)
+            s["tolerance"] = ABS_TOL[k] if k in ABS_TOL else round(max(abs(s["target"]) * TOL[k], MIN_TOL.get(k, 0)), 3)
 
     srefs = [r for r in refs if "structure" in r["roles"]] or refs
     curves = [energy_curve(r["a"]) for r in srefs]

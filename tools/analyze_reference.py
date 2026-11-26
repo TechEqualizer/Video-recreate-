@@ -250,6 +250,8 @@ def analyze(v, out, thr, fps):
         motion_by_quarter=[round(float(x.mean()), 2) if len(x) else 0 for x in q],
         **color_stats(frames),
     )
+    # motion relative to contrast: comparable across bright and dark looks
+    m["motion_rel"] = round(m["motion"] / m["contrast"], 3) if m["contrast"] else None
     m["energy_shape"] = ("front-loaded" if m["motion_by_quarter"][0] >= max(m["motion_by_quarter"]) * 0.9 else
                          "rising" if m["motion_by_quarter"][-1] >= max(m["motion_by_quarter"]) * 0.9 else "mid-peak")
     m["tempo_model"] = "cut-driven" if m["cuts_per_10s"] >= 2.5 else ("flythrough" if m["pct_shots_camera_moving"] >= 60 else "slow")

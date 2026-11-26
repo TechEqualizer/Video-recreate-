@@ -1,5 +1,5 @@
 {
- "file": "projects/homeview-ref/refs/homeview_body.mp4",
+ "file": "projects/flmlnk-homeview/refs/homeview_body.mp4",
  "duration_s": 58.601,
  "fps": 30.0,
  "width": 1280,
@@ -28,6 +28,7 @@
   "contrast": 63.1,
   "saturation": 0.067,
   "warmth": 1.4,
+  "motion_rel": 0.205,
   "energy_shape": "front-loaded",
   "tempo_model": "cut-driven"
  },

@@ -1,13 +1,12 @@
 {
  "references": [
   {
-   "path": "projects/homeview-ref/refs/homeview_body.analysis/analysis.json",
-   "file": "projects/homeview-ref/refs/homeview_body.mp4",
+   "path": "projects/flmlnk-homeview/refs/homeview_body.analysis/analysis.json",
+   "file": "projects/flmlnk-homeview/refs/homeview_body.mp4",
    "roles": [
     "structure",
     "pacing",
     "camera",
-    "look",
     "sound"
    ],
    "weight": 1.0,
@@ -22,7 +21,7 @@
     "min": 5.29,
     "max": 5.29,
     "n": 1,
-    "tolerance": 1.06
+    "tolerance": 1.058
    },
    "median_shot_s": {
     "target": 1.72,
@@ -36,7 +35,7 @@
     "min": 1.83,
     "max": 1.83,
     "n": 1,
-    "tolerance": 0.46
+    "tolerance": 0.458
    },
    "shortest_shot_s": {
     "target": 0.6,
@@ -50,14 +49,14 @@
     "min": 4.13,
     "max": 4.13,
     "n": 1,
-    "tolerance": 1.24
+    "tolerance": 1.239
    },
    "first_cut_s": {
-    "target": 3.07,
-    "min": 3.07,
-    "max": 3.07,
+    "target": 3.067,
+    "min": 3.067,
+    "max": 3.067,
     "n": 1,
-    "tolerance": 1.53
+    "tolerance": 1.534
    }
   },
   "camera": {
@@ -68,12 +67,12 @@
     "n": 1,
     "tolerance": 10
    },
-   "motion": {
-    "target": 12.96,
-    "min": 12.96,
-    "max": 12.96,
+   "motion_rel": {
+    "target": 0.205,
+    "min": 0.205,
+    "max": 0.205,
     "n": 1,
-    "tolerance": 3.89
+    "tolerance": 0.051
    },
    "pct_static": {
     "target": 16.0,
@@ -87,39 +86,10 @@
     "min": 2.17,
     "max": 2.17,
     "n": 1,
-    "tolerance": 0.65
+    "tolerance": 0.651
    }
   },
-  "look": {
-   "brightness": {
-    "target": 211.7,
-    "min": 211.7,
-    "max": 211.7,
-    "n": 1,
-    "tolerance": 31.75
-   },
-   "contrast": {
-    "target": 63.1,
-    "min": 63.1,
-    "max": 63.1,
-    "n": 1,
-    "tolerance": 15.78
-   },
-   "saturation": {
-    "target": 0.07,
-    "min": 0.07,
-    "max": 0.07,
-    "n": 1,
-    "tolerance": 0.02
-   },
-   "warmth": {
-    "target": 1.4,
-    "min": 1.4,
-    "max": 1.4,
-    "n": 1,
-    "tolerance": 12
-   }
-  },
+  "look": {},
   "sound": {
    "lufs": {
     "target": -15.7,
@@ -145,11 +115,11 @@
   },
   "structure": {
    "duration_s": {
-    "target": 58.6,
-    "min": 58.6,
-    "max": 58.6,
-    "n": 1,
-    "tolerance": 8.79
+    "target": 30.0,
+    "min": 30.0,
+    "max": 30.0,
+    "n": 0,
+    "tolerance": 1.5
    }
   }
  },
@@ -199,8 +169,8 @@
    "share": 0.063
   }
  ],
- "aspect": "16:9",
- "length_s": 58.6,
+ "aspect": "9:16",
+ "length_s": 30.0,
  "edit_grid": [
   {
    "n": 1,
@@ -215,147 +185,67 @@
   {
    "n": 3,
    "start_s": 5.72,
-   "dur_s": 2.862
+   "dur_s": 1.431
   },
   {
    "n": 4,
-   "start_s": 8.59,
-   "dur_s": 1.431
-  },
-  {
-   "n": 5,
-   "start_s": 10.02,
-   "dur_s": 1.431
-  },
-  {
-   "n": 6,
-   "start_s": 11.45,
-   "dur_s": 1.431
-  },
-  {
-   "n": 7,
-   "start_s": 12.88,
+   "start_s": 7.16,
    "dur_s": 1.908
   },
   {
-   "n": 8,
+   "n": 5,
+   "start_s": 9.06,
+   "dur_s": 2.862
+  },
+  {
+   "n": 6,
+   "start_s": 11.93,
+   "dur_s": 2.862
+  },
+  {
+   "n": 7,
    "start_s": 14.79,
+   "dur_s": 1.431
+  },
+  {
+   "n": 8,
+   "start_s": 16.22,
    "dur_s": 1.908
   },
   {
    "n": 9,
-   "start_s": 16.7,
+   "start_s": 18.13,
    "dur_s": 1.908
   },
   {
    "n": 10,
-   "start_s": 18.6,
-   "dur_s": 2.862
+   "start_s": 20.03,
+   "dur_s": 1.908
   },
   {
    "n": 11,
-   "start_s": 21.47,
-   "dur_s": 2.862
+   "start_s": 21.94,
+   "dur_s": 1.431
   },
   {
    "n": 12,
-   "start_s": 24.33,
+   "start_s": 23.37,
    "dur_s": 1.431
   },
   {
    "n": 13,
-   "start_s": 25.76,
+   "start_s": 24.8,
    "dur_s": 1.431
   },
   {
    "n": 14,
-   "start_s": 27.19,
+   "start_s": 26.24,
    "dur_s": 1.431
   },
   {
    "n": 15,
-   "start_s": 28.62,
-   "dur_s": 1.431
-  },
-  {
-   "n": 16,
-   "start_s": 30.05,
-   "dur_s": 1.908
-  },
-  {
-   "n": 17,
-   "start_s": 31.96,
-   "dur_s": 1.908
-  },
-  {
-   "n": 18,
-   "start_s": 33.87,
-   "dur_s": 1.908
-  },
-  {
-   "n": 19,
-   "start_s": 35.78,
-   "dur_s": 1.908
-  },
-  {
-   "n": 20,
-   "start_s": 37.68,
-   "dur_s": 1.908
-  },
-  {
-   "n": 21,
-   "start_s": 39.59,
-   "dur_s": 1.908
-  },
-  {
-   "n": 22,
-   "start_s": 41.5,
-   "dur_s": 1.431
-  },
-  {
-   "n": 23,
-   "start_s": 42.93,
-   "dur_s": 1.431
-  },
-  {
-   "n": 24,
-   "start_s": 44.36,
-   "dur_s": 1.431
-  },
-  {
-   "n": 25,
-   "start_s": 45.79,
-   "dur_s": 1.431
-  },
-  {
-   "n": 26,
-   "start_s": 47.22,
-   "dur_s": 1.431
-  },
-  {
-   "n": 27,
-   "start_s": 48.65,
-   "dur_s": 1.431
-  },
-  {
-   "n": 28,
-   "start_s": 50.09,
-   "dur_s": 1.431
-  },
-  {
-   "n": 29,
-   "start_s": 51.52,
-   "dur_s": 1.431
-  },
-  {
-   "n": 30,
-   "start_s": 52.95,
-   "dur_s": 2.862
-  },
-  {
-   "n": 31,
-   "start_s": 55.81,
-   "dur_s": 2.797
+   "start_s": 27.67,
+   "dur_s": 2.337
   }
  ]
 }

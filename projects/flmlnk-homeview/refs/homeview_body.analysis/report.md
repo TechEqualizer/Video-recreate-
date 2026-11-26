@@ -22,6 +22,7 @@
 | contrast | 63.1 |
 | saturation | 0.067 |
 | warmth | 1.4 |
+| motion_rel | 0.205 |
 | energy_shape | front-loaded |
 | tempo_model | cut-driven |
 | audio.lufs | -15.7 |

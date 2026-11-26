@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: 'DM Sans'; font-weight: 400; src: url(node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-weight: 500; src: url(node_modules/@fontsource/dm-sans/files/dm-sans-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; src: url(node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2) format('woff2'); }
+:root { --ground:#0B0D10; --warm:#28251F; --cream:#F3EEE5; --gold:#D3B58B; --red:#D5111C; --card:#F4F0E9; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); font-family: 'DM Sans', sans-serif; color: var(--cream); }
+.scene { position: absolute; inset: 0; display: none; overflow: hidden; }
+.glow { position: absolute; inset: -20%; background: radial-gradient(ellipse at 50% 48%, rgba(60,52,42,.85) 0%, rgba(40,37,31,.55) 28%, rgba(11,13,16,0) 62%); }
+.vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); pointer-events: none; }
+.center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+/* cards */
+.card { position: absolute; left: 90px; right: 90px; top: 50%; text-align: center; }
+.line { display: block; font-size: 82px; line-height: 1.12; font-weight: 500; letter-spacing: -1.5px; white-space: nowrap; }
+.w { display: inline-block; will-change: transform, opacity, filter; }
+.serif { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); font-size: 100px; letter-spacing: -0.5px; }
+/* posters */
+.poster { position: absolute; border-radius: 14px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06); background: #111; }
+.poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* phone */
+.phone { position: absolute; width: 560px; height: 1140px; border-radius: 78px; background: #0d0d0e; box-shadow: 0 0 0 3px #2a2a2c, 0 0 0 5px #0a0a0a, 0 60px 120px rgba(0,0,0,.7); padding: 22px; }
+.screen { width: 100%; height: 100%; border-radius: 58px; overflow: hidden; background: #000; position: relative; }
+.screen img { width: 100%; height: 72%; object-fit: cover; display: block; }
+.ig-top { position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: flex-end; padding: 0 34px 18px; font-size: 30px; font-weight: 500; background: linear-gradient(#000 60%, rgba(0,0,0,0)); }
+.ig-top b { width: 46px; height: 46px; border-radius: 50%; background: var(--red); margin-right: 14px; display: inline-block; }
+.caption { position: absolute; left: 34px; right: 34px; bottom: 110px; font-size: 34px; color: var(--cream); }
+.caption small { display: block; font-size: 24px; color: #a3a3a3; margin-top: 10px; }
+.comment { position: absolute; width: 560px; height: 128px; border-radius: 30px; background: var(--card); color: #26241F; display: flex; align-items: center; padding: 0 30px; box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+.comment .av { width: 72px; height: 72px; border-radius: 50%; background: #26241F; color: var(--card); font-size: 26px; font-weight: 500; display: flex; align-items: center; justify-content: center; margin-right: 22px; flex: none; }
+.comment .tx small { display: block; font-size: 20px; color: #81796E; }
+.comment .tx { font-size: 32px; font-weight: 500; }
+.comment .heart { margin-left: auto; color: var(--red); font-size: 34px; }
+/* chat + grid */
+.bubble { position: absolute; left: 110px; right: 110px; top: 380px; background: var(--red); border-radius: 44px 44px 44px 12px; padding: 40px 48px; font-size: 52px; font-weight: 500; line-height: 1.15; color: #fff; box-shadow: 0 30px 80px rgba(213,17,28,.35); transform-origin: 0% 100%; }
+.grid { position: absolute; display: grid; gap: 22px; }
+.tile { position: relative; border-radius: 12px; overflow: hidden; background: #151515; }
+.tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tile .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: var(--red); transform-origin: 0 50%; }
+.tile .ring { position: absolute; inset: 0; border-radius: 12px; box-shadow: inset 0 0 0 5px var(--red); }
+/* tv */
+.tv { position: absolute; width: 980px; height: 551px; border-radius: 22px; overflow: hidden; background: #000; box-shadow: 0 0 0 4px #1d1d1f, 0 60px 140px rgba(0,0,0,.7); }
+.tv img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+.pill { position: absolute; padding: 22px 42px; border-radius: 60px; background: var(--red); color: #fff; font-size: 34px; font-weight: 500; white-space: nowrap; }
+.ph { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font: 500 26px 'DM Sans'; letter-spacing: 3px; color: rgba(243,238,229,.45); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const BEAT = 60 / 126;
+const P = n => 'assets/' + n;
+const POSTERS = ['pd-charade.jpg', 'pd-general.jpg', 'pd-his-girl-friday.jpg', 'pd-metropolis.jpg', 'pd-potemkin.jpg', 'pd-sherlock-jr.jpg'].map(P);
+
+// ---------- math ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const inv = (a, b, x) => clamp((x - a) / (b - a));
+const easeOut = t => 1 - Math.pow(1 - clamp(t), 3);
+const easeInOut = t => { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+const expoOut = t => { t = clamp(t); return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); };
+// damped spring 0 -> 1 with overshoot
+const spring = (t, k = 7, w = 11) => { t = Math.max(0, t); return 1 - Math.exp(-k * t) * Math.cos(w * t); };
+
+// ---------- helpers ----------
+function el(tag, cls, parent, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; (parent || document.body).appendChild(e); return e; }
+function img(src, parent, cls) { const i = el('img', cls, parent); i.src = src; return i; }
+const stage = document.getElementById('stage');
+function scene() { const s = el('div', 'scene', stage); el('div', 'glow', s); return s; }
+function vignette(s) { el('div', 'vignette', s); }
+function driftGlow(s, t, dir = 1) { const g = s.firstChild; g.style.transform = `translate(${dir * (-160 + 200 * t)}px, ${-60 + 90 * t}px) scale(${1 + 0.18 * t})`; g.style.opacity = 0.75 + 0.25 * Math.sin(t * 2.4); }
+
+// ---------- scenes ----------
+function Wordmark(opts = {}) {
+  const s = scene();
+  const box = el('div', 'center', s); box.style.width = '760px'; box.style.height = (760 * 279 / 970) + 'px';
+  const base = img(P('mark_base.png'), box); const wedge = img(P('mark_wedge.png'), box);
+  for (const i of [base, wedge]) { i.style.position = 'absolute'; i.style.inset = '0'; i.style.width = '100%'; }
+  let sub, pill;
+  if (opts.end) {
+    sub = el('div', '', s, "Let's talk about your catalog."); Object.assign(sub.style, { position: 'absolute', left: 0, right: 0, top: '1090px', textAlign: 'center', fontSize: '44px', color: 'rgba(243,238,229,.75)' });
+    pill = el('div', 'pill', s, 'flmlnk.com'); Object.assign(pill.style, { left: '50%', top: '1200px' });
+  }
+  vignette(s);
+  return { s, dur: 0, update(t) {
+    const push = 1 + 0.035 * (t / 2);
+    driftGlow(s, t);
+    const a = inv(0.0, 0.55, t);
+    base.style.opacity = a; base.style.filter = `blur(${(1 - easeOut(a)) * 18}px)`;
+    box.style.transform = `translate(-50%,-50%) scale(${(0.94 + 0.06 * easeOut(a)) * push})`;
+    const wt = t - (opts.end ? 0.25 : 0.62);
+    const k = spring(wt * 1.1);
+    wedge.style.opacity = wt > 0 ? 1 : 0;
+    wedge.style.transform = `translate(${(1 - k) * 260}px, ${(1 - k) * 190}px)`;
+    if (opts.end) {
+      const b = inv(0.45, 0.9, t);
+      sub.style.opacity = b; sub.style.transform = `translateY(${(1 - easeOut(b)) * 24}px)`; sub.style.filter = `blur(${(1 - b) * 8}px)`;
+      const c = spring((t - 0.6) * 1.2);
+      pill.style.opacity = t > 0.6 ? 1 : 0; pill.style.transform = `translate(-50%,0) scale(${t > 0.6 ? 0.6 + 0.4 * c : 0.6})`;
+    }
+  } };
+}
+
+function Card(lines) {
+  // lines: [[ [text, serif?], ... ], ...]
+  const s = scene();
+  const card = el('div', 'card', s);
+  const words = [];
+  lines.forEach((segs, li) => {
+    const line = el('div', 'line', card);
+    segs.forEach(([text, serif]) => {
+      text.split(/(\s+)/).forEach(tok => {
+        if (!tok) return;
+        if (/^\s+$/.test(tok)) { line.appendChild(document.createTextNode(' ')); return; }
+        const w = el('span', 'w' + (serif ? ' serif' : ''), line, tok);
+        words.push({ w, li });
+      });
+    });
+  });
+  vignette(s);
+  return { s, update(t) {
+    card.style.transform = `translateY(-50%) scale(${1 + 0.05 * t})`;
+    driftGlow(s, t, lines.length % 2 ? 1 : -1);
+    let idx = 0;
+    words.forEach(({ w, li }, i) => {
+      const start = 0.06 + i * 0.11 + li * 0.12;
+      const a = inv(start, start + 0.38, t);
+      const e = easeOut(a);
+      w.style.opacity = a;
+      w.style.transform = `translateY(${(1 - e) * 26}px)`;
+      w.style.filter = `blur(${(1 - e) * 12}px)`;
+    });
+  } };
+}
+
+function Fan() {
+  const s = scene();
+  const wrap = el('div', '', s); Object.assign(wrap.style, { position: 'absolute', inset: 0, perspective: '1800px' });
+  const order = [1, 0, 3, 2, 5];
+  const ps = order.map(i => { const p = el('div', 'poster', wrap); img(POSTERS[i], p); Object.assign(p.style, { width: '420px', height: '630px', left: '330px', top: '645px' }); return p; });
+  const X = [-330, -165, 0, 165, 330], R = [-14, -7, 0, 7, 14], Y = [70, 22, 0, 22, 70], Z = [1, 2, 5, 3, 1];
+  vignette(s);
+  return { s, update(t) {
+    ps.forEach((p, i) => {
+      const d = Math.abs(i - 2) * 0.05;
+      const turn = spring((t - d) * 1.5, 6, 9);
+      const fan = spring((t - 0.32 - d) * 1.4, 6, 9);
+      const drift = t * 18;
+      p.style.zIndex = Z[i];
+      p.style.transform = `translate3d(${X[i] * fan + drift}px, ${Y[i] * fan}px, ${-Math.abs(i - 2) * 40}px) rotateY(${(1 - clamp(turn, 0, 1.2)) * 82}deg) rotateZ(${R[i] * fan}deg) scale(${1 + 0.05 * t})`;
+      p.style.opacity = t > d ? 1 : 0;
+    });
+  } };
+}
+
+function PunchIn(src, fx = 0.5, fy = 0.62) {
+  const s = scene();
+  const p = el('div', 'poster', s); img(src, p);
+  Object.assign(p.style, { width: '1080px', height: '1620px', left: '0px', top: '150px', borderRadius: '0', transformOrigin: `${fx * 100}% ${fy * 100}%` });
+  vignette(s);
+  return { s, update(t) {
+    const k = expoOut(t / 0.45);
+    p.style.transform = `scale(${1.15 + 0.9 * k}) rotate(${-2 + 2 * k}deg)`;
+    p.style.filter = `blur(${(1 - k) * 6}px) contrast(1.08)`;
+  } };
+}
+
+function Wall() {
+  const s = scene();
+  const COLS = 9, ROWS = 12, TW = 230, TH = 345, G = 24;
+  const g = el('div', 'grid', s);
+  Object.assign(g.style, { gridTemplateColumns: `repeat(${COLS}, ${TW}px)`, left: '-620px', top: '-560px', transformOrigin: '50% 50%' });
+  const lit = new Set([30, 41, 49]);
+  const tiles = [];
+  for (let i = 0; i < COLS * ROWS; i++) {
+    const t = el('div', 'tile', g); t.style.width = TW + 'px'; t.style.height = TH + 'px';
+    const im = img(POSTERS[(i * 7 + Math.floor(i / COLS)) % POSTERS.length], t);
+    tiles.push({ t, im, lit: lit.has(i) });
+  }
+  vignette(s);
+  return { s, update(t) {
+    g.style.transform = `rotate(-9deg) translate(${-60 - 260 * t}px, ${40 - 360 * t}px) scale(${1.02 + 0.06 * t})`;
+    tiles.forEach(({ t: tile, im, lit }) => {
+      const on = lit ? inv(0.55, 0.85, t) : 0;
+      im.style.filter = `grayscale(${1 - on}) brightness(${0.28 + 0.72 * on})`;
+      tile.style.boxShadow = on ? `0 0 0 ${5 * on}px #D5111C, 0 0 ${60 * on}px rgba(213,17,28,.5)` : 'none';
+    });
+  } };
+}
+
+function PhoneComments() {
+  const s = scene();
+  const ph = el('div', 'phone', s);
+  const sc = el('div', 'screen', ph);
+  img(POSTERS[3], sc).style.objectPosition = '50% 30%';
+  el('div', 'ig-top', sc, '<b></b>flmlnk');
+  el('div', 'caption', sc, 'Some stories stay with you.<small>There’s a whole film behind this moment.</small>');
+  const data = [['AR', 'New viewer', 'Where can I watch this?'], ['TJ', 'New viewer', 'How did I miss this film?'], ['MP', 'New viewer', 'That’s tonight’s movie sorted.']];
+  const cs = data.map(([a, n, q]) => { const c = el('div', 'comment', s, `<div class="av">${a}</div><div class="tx"><small>${n}</small>${q}</div><div class="heart">♥</div>`); return c; });
+  vignette(s);
+  return { s, update(t) {
+    const k = spring(t * 1.3, 6, 9);
+    ph.style.left = '110px'; ph.style.top = '390px';
+    ph.style.transform = `translateY(${(1 - k) * 900}px) rotate(${-4 + (1 - k) * 6}deg) translateX(${-40 * t}px)`;
+    cs.forEach((c, i) => {
+      const st = 0.42 + i * 0.36;
+      const a = spring((t - st) * 1.6, 7, 10);
+      c.style.left = (440 - i * 10) + 'px'; c.style.top = (760 + i * 160) + 'px';
+      c.style.opacity = t > st ? 1 : 0;
+      c.style.transform = `translateX(${(1 - a) * 600}px) translateY(${-30 * t}px) scale(${0.9 + 0.1 * clamp(a, 0, 1.1)})`;
+    });
+  } };
+}
+
+function ChatGrid(opts = {}) {
+  const s = scene();
+  const bubble = el('div', 'bubble', s);
+  const text = 'Which titles in our catalog are worth another dollar?';
+  const g = el('div', 'grid', s);
+  const C = 3, TW = 270, TH = 405;
+  Object.assign(g.style, { gridTemplateColumns: `repeat(${C}, ${TW}px)`, left: '117px', top: '820px' });
+  const LIT = [1, 3, 8];
+  const tiles = [];
+  for (let i = 0; i < 9; i++) {
+    const t = el('div', 'tile', g); t.style.width = TW + 'px'; t.style.height = TH + 'px';
+    const im = img(POSTERS[(i * 5 + 2) % POSTERS.length], t);
+    const bar = el('div', 'bar', t); const ring = el('div', 'ring', t);
+    tiles.push({ t, im, bar, ring, lit: LIT.includes(i), i });
+  }
+  let ripple;
+  if (opts.tap) { ripple = el('div', '', s); Object.assign(ripple.style, { position: 'absolute', width: '160px', height: '160px', borderRadius: '50%', border: '6px solid rgba(255,255,255,.9)' }); }
+  const ph = opts.label ? el('div', 'ph', s, opts.label) : null;
+  vignette(s);
+  return { s, update(t) {
+    const showBubble = !opts.tap;
+    bubble.style.display = showBubble ? 'block' : 'none';
+    if (showBubble) {
+      const k = spring(t * 1.6, 7, 10);
+      bubble.style.transform = `scale(${0.6 + 0.4 * clamp(k, 0, 1.1)})`; bubble.style.opacity = clamp(t * 6);
+      const n = Math.floor(text.length * inv(0.12, 0.85, t));
+      bubble.textContent = text.slice(0, Math.max(1, n));
+    }
+    const pan = opts.tap ? -260 : 0;
+    g.style.transform = `translateY(${pan - 120 * t}px) scale(${opts.tap ? 1.25 + 0.05 * t : 1})`;
+    g.style.transformOrigin = '50% 30%';
+    tiles.forEach(({ t: tile, im, bar, ring, lit, i }) => {
+      const st = opts.tap ? (i === 3 ? 0.55 : 99) : 1.05 + LIT.indexOf(i) * 0.12;
+      const on = lit ? inv(st, st + 0.25, t) : 0;
+      im.style.filter = `grayscale(${1 - on}) brightness(${0.3 + 0.7 * on})`;
+      bar.style.transform = `scaleX(${on})`; ring.style.opacity = on;
+    });
+    if (ripple) {
+      const r = inv(0.5, 1.0, t);
+      ripple.style.left = (117 + 270 * 0 + 135 - 80) + 'px'; ripple.style.top = (820 - 260 + 405 * 1 + 120) + 'px';
+      ripple.style.opacity = r > 0 && r < 1 ? 1 - r : 0; ripple.style.transform = `scale(${0.4 + 1.4 * easeOut(r)})`;
+    }
+  } };
+}
+
+function Handoff() {
+  const s = scene();
+  const tv = el('div', 'tv', s); const tvi = img(POSTERS[3], tv);
+  const ph = el('div', 'phone', s); ph.style.transformOrigin = '50% 50%';
+  const sc = el('div', 'screen', ph); const pi = img(POSTERS[3], sc); pi.style.height = '100%';
+  const pill = el('div', 'pill', s, 'Watch the full film ↗');
+  vignette(s);
+  return { s, update(t) {
+    const m = easeInOut(inv(0.15, 0.85, t));
+    // phone rises and dissolves into the TV
+    ph.style.left = '260px'; ph.style.top = '390px';
+    ph.style.transform = `translateY(${lerp(260, -260, m)}px) scale(${lerp(1, 0.5, m)}) rotate(${lerp(-3, 0, m)}deg)`;
+    ph.style.opacity = 1 - inv(0.55, 0.85, t);
+    tv.style.left = '50px'; tv.style.top = '640px';
+    tv.style.opacity = inv(0.45, 0.8, t);
+    tv.style.transform = `scale(${lerp(0.82, 1, easeOut(inv(0.45, 1.2, t)))})`;
+    tvi.style.transform = `scale(${1.15 + 0.08 * t}) translate(${-20 * t}px, ${-30 * t}px)`;
+    tvi.style.objectPosition = '50% 25%';
+    const c = spring((t - 0.85) * 1.6);
+    pill.style.left = '50%'; pill.style.top = '1290px'; pill.style.opacity = t > 0.85 ? 1 : 0;
+    pill.style.transform = `translate(-50%,0) scale(${t > 0.85 ? 0.6 + 0.4 * c : 0.6})`;
+  } };
+}
+
+function RedMacro(label) {
+  const s = scene();
+  s.style.background = '#120304';
+  const w = el('div', '', s);
+  Object.assign(w.style, { position: 'absolute', width: '2600px', height: '2600px', left: '-500px', top: '-200px', background: 'linear-gradient(135deg, #5a0207 0%, #D5111C 45%, #ff4a52 52%, #D5111C 58%, #6d0309 100%)', clipPath: 'polygon(100% 0, 100% 100%, 0 100%)', backgroundSize: '200% 200%' });
+  const ph = label ? el('div', 'ph', s, label) : null;
+  vignette(s);
+  return { s, update(t) {
+    w.style.transform = `translate(${-140 * t}px, ${-90 * t}px) rotate(${-2 + 3 * t}deg) scale(${1 + 0.05 * t})`;
+    w.style.backgroundPosition = `${100 - 70 * t}% ${100 - 70 * t}%`;
+  } };
+}
+
+function Carousel() {
+  const s = scene();
+  const order = [0, 1, 2, 4, 5, 3];
+  const W = 600, H = 900, GAP = 60;
+  const ps = order.map(i => { const p = el('div', 'poster', s); img(POSTERS[i], p); Object.assign(p.style, { width: W + 'px', height: H + 'px', top: '510px' }); return p; });
+  vignette(s);
+  return { s, update(t, dur) {
+    const n = ps.length - 1;
+    const prog = expoOut(inv(0, dur * 0.92, t)) * n; // index centred
+    ps.forEach((p, i) => {
+      const off = i - prog; // 0 = centre
+      const x = 540 - W / 2 + off * (W + GAP);
+      const sc = 1 - Math.min(0.22, Math.abs(off) * 0.22);
+      p.style.left = x + 'px';
+      p.style.transform = `scale(${sc})`;
+      p.style.filter = `brightness(${1 - Math.min(0.6, Math.abs(off) * 0.6)})`;
+      p.style.zIndex = 10 - Math.round(Math.abs(off) * 2);
+    });
+  } };
+}
+
+// ---------- timeline (beats) ----------
+const SHOTS = [
+  [4, Wordmark()],
+  [4, Card([[['Old films.']], [['New '], ['believers.', 1]]])],
+  [3, Fan()],
+  [4, Card([[['Most films were never']], [['given '], ['a real chance.', 1]]])],
+  [1, PunchIn(POSTERS[5], 0.42, 0.66)],
+  [2, Wall()],
+  [4, Card([[['Getting onto a platform']], [['is '], ['not discovery.', 1]]])],
+  [4, PhoneComments()],
+  [4, Card([[['We help the right people']], [['discover '], ['the whole film.', 1]]])],
+  [4, ChatGrid()],
+  [4, Card([[['Know which titles']], [['to back.', 1]]])],
+  [4, ChatGrid({ tap: true, label: 'PLACEHOLDER · AI HAND TAPS A TITLE' })],
+  [4, Card([[['Evidence,']], [['not forecasts.', 1]]])],
+  [3, Handoff()],
+  [3, RedMacro('PLACEHOLDER · AI RED MACRO')],
+  [4, Carousel()],
+  [4, Card([[['The money is already']], [['in '], ['your catalog.', 1]]])],
+  [3, Wordmark({ end: true })],
+];
+let acc = 0;
+const TL = SHOTS.map(([beats, sc]) => { const start = acc * BEAT; acc += beats; return { start, dur: beats * BEAT, sc }; });
+window.DURATION = acc * BEAT;
+window.CUTS = TL.slice(1).map(x => x.start);
+let current = null;
+window.seek = function (t) {
+  const shot = TL.find(x => t >= x.start && t < x.start + x.dur) || TL[TL.length - 1];
+  if (current !== shot) { if (current) current.sc.s.style.display = 'none'; shot.sc.s.style.display = 'block'; current = shot; }
+  shot.sc.update(t - shot.start, shot.dur);
+};
+window.ready = async function () {
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  return true;
+};
+seek(0);
+</script>
+</body>
+</html>

@@ -84,6 +84,8 @@ Defaults, then show Dw one line per reference to confirm:
 - `camera`: the reference with the most signature camera moves.
 - Weight 2 for the reference Dw calls his favourite.
 
+**When the brand overrides the look** (e.g. a white reference, a dark brand), drop the `look` role. Raw `motion` lives under look because frame difference scales with brightness; the camera role uses `motion_rel` (motion / contrast), which compares fairly across looks.
+
 **Conflicts are decisions, not averages.** If pacing references disagree on `tempo_model` (one cut-driven at 4 cuts/10 s, one flythrough at 0.5) pick one model and give only that reference the `pacing` role. Same for bright-vs-dark looks. Write the choices and why in `style/roles.md`.
 
 ```bash

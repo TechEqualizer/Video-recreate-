@@ -1,0 +1,5 @@
+{
+ "name": "flmlnk-homeview-build",
+ "private": true,
+ "dependencies": {"@fontsource/dm-sans": "^5", "@fontsource/instrument-serif": "^5"}
+}

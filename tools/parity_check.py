@@ -6,6 +6,9 @@ Usage:
     python3 tools/parity_check.py projects/<p>/style/style_dna.json projects/<p>/renders/cut_v1.analysis/analysis.json
 """
 import json, sys
+
+AT_LEAST = {"cuts_on_beat_pct"}  # more is better
+AT_MOST = {"pct_static", "longest_still_s"}  # less is better
 from pathlib import Path
 
 
@@ -19,6 +22,10 @@ def main(dna_p, cut_p):
                 rows.append((role, k, s["target"], s["tolerance"], "n/a", "SKIP"))
                 continue
             ok = abs(v - s["target"]) <= s["tolerance"] or s["min"] <= v <= s["max"]
+            if k in AT_LEAST:  # only falling short fails
+                ok = v >= s["target"] - s["tolerance"]
+            if k in AT_MOST:  # only going over fails
+                ok = v <= s["target"] + s["tolerance"]
             fails += not ok
             rows.append((role, k, s["target"], s["tolerance"], v, "PASS" if ok else "FAIL"))
     if cut["aspect"] != dna["aspect"]:
