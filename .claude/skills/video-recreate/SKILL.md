@@ -147,7 +147,10 @@ Dw's first animatic "did not feel smooth"; measured jerk was 25% above the refer
 - **Cap speeds.** Pans and drifts no faster than one screen-width per ~6 s; anything faster must be blurred and eased. Carousels move at most 3 slots per shot.
 - **Ease both ends.** Entrances decelerate in, exits accelerate out (sine or cubic in-out). Never start a move at full speed (no expo-out from zero on long travels).
 - **Damped springs.** ~3% overshoot (k=9, w=8 in `index.html`); no visible wobble.
+- **No pop-ons.** Nothing appears or disappears in one frame: every entrance fades over 0.12 to 0.2 s while it moves. Single-frame appearances were the biggest jerk source in the FLMLNK build.
+- **Pushes are steady.** A punch-in or push runs the whole shot at constant or eased speed; never a fast zoom that stops dead.
 - **Dark-to-bright cuts strobe more.** Keep fast motion away from the first frames after a dark/bright cut.
+- **Find the culprit:** `python3 tools/smoothness.py cut.mp4 cut.analysis/analysis.json` lists jerk per shot.
 - **Measure it.** `jerk` (frame-to-frame change in motion energy within shots, relative to mean motion) is in every analysis and is an at-most target in the Style DNA camera role.
 
 ## 8. Parity: prove it matches
