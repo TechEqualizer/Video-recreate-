@@ -1,6 +1,6 @@
 # Shot list: FLMLNK × apple-minimal (30 s, 9:16, 126 BPM, 63 beats)
 
-Built in code unless marked AI. Imagery: Dw's original 16:9 catalog key art from Higgsfield (`brands/flmlnk/assets/posters_original/`, 16 fictional titles); public-domain posters removed Nov 26. Times = beats × 0.476 s. Animatic: `renders/flmlnk_homeview_animatic_v2.mp4`.
+Built in code unless marked AI. Imagery: Dw's original 16:9 catalog key art from Higgsfield (`brands/flmlnk/assets/posters_original/`, 16 fictional titles); public-domain posters removed Nov 26. Times = beats × 0.476 s. Animatic: `renders/flmlnk_homeview_animatic_v7.mp4` (60 fps, motion blur). Beats since v7: cards 2, 11, 13 are 3 beats; carousel 7 beats.
 
 | # | Start | Beats | Shot | Source |
 | --- | --- | --- | --- | --- |
