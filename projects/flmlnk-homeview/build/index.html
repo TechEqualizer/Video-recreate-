@@ -54,7 +54,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 <script>
 const BEAT = 60 / 126;
 const P = n => 'assets/' + n;
-const POSTERS = ['pd-charade.jpg', 'pd-general.jpg', 'pd-his-girl-friday.jpg', 'pd-metropolis.jpg', 'pd-potemkin.jpg', 'pd-sherlock-jr.jpg'].map(P);
+const CAT = ['engine-hearts','night-desk','orbit-nine','red-ledger','kinfolk-road','hollow-acre','cinder-line','the-glass-orchard','saltwater-kings','iron-hollow','paper-crowns','dust-diamonds','mile-marker-9','twelve-rounds-deep','snowbound-at-maple-inn','sweet-revenge-bakery'].map(n => 'assets/cat/' + n + '.jpg');
+const POSTERS = CAT; // 16:9 original key art (Dw's Higgsfield generations)
 
 // ---------- math ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -140,18 +141,17 @@ function Card(lines) {
 function Fan() {
   const s = scene();
   const wrap = el('div', '', s); Object.assign(wrap.style, { position: 'absolute', inset: 0, perspective: '1800px' });
-  const order = [1, 0, 3, 2, 5];
-  const ps = order.map(i => { const p = el('div', 'poster', wrap); img(POSTERS[i], p); Object.assign(p.style, { width: '420px', height: '630px', left: '330px', top: '645px' }); return p; });
-  const X = [-330, -165, 0, 165, 330], R = [-14, -7, 0, 7, 14], Y = [70, 22, 0, 22, 70], Z = [1, 2, 5, 3, 1];
+  const pick = [6, 1, 0, 2, 4];
+  const ps = pick.map(i => { const p = el('div', 'poster', wrap); img(CAT[i], p); Object.assign(p.style, { width: '820px', height: '461px', left: '130px', top: '730px' }); return p; });
+  const Y = [-560, -280, 0, 280, 560], R = [-6, -3, 0, 3, 6], X = [-40, -20, 0, 20, 40], Z = [1, 2, 5, 3, 1];
   vignette(s);
   return { s, update(t) {
     ps.forEach((p, i) => {
       const d = Math.abs(i - 2) * 0.05;
       const turn = spring((t - d) * 1.5, 6, 9);
-      const fan = spring((t - 0.32 - d) * 1.4, 6, 9);
-      const drift = t * 18;
+      const fan = spring((t - 0.3 - d) * 1.4, 6, 9);
       p.style.zIndex = Z[i];
-      p.style.transform = `translate3d(${X[i] * fan + drift}px, ${Y[i] * fan}px, ${-Math.abs(i - 2) * 40}px) rotateY(${(1 - clamp(turn, 0, 1.2)) * 82}deg) rotateZ(${R[i] * fan}deg) scale(${1 + 0.05 * t})`;
+      p.style.transform = `translate3d(${X[i] * fan + t * 16}px, ${Y[i] * fan}px, ${-Math.abs(i - 2) * 60}px) rotateX(${(1 - clamp(turn, 0, 1.2)) * 82}deg) rotateZ(${R[i] * fan}deg) scale(${(1 - Math.abs(i - 2) * 0.06) * (1 + 0.05 * t)})`;
       p.style.opacity = t > d ? 1 : 0;
     });
   } };
@@ -160,7 +160,8 @@ function Fan() {
 function PunchIn(src, fx = 0.5, fy = 0.62) {
   const s = scene();
   const p = el('div', 'poster', s); img(src, p);
-  Object.assign(p.style, { width: '1080px', height: '1620px', left: '0px', top: '150px', borderRadius: '0', transformOrigin: `${fx * 100}% ${fy * 100}%` });
+  Object.assign(p.style, { width: '1080px', height: '1920px', left: '0px', top: '0px', borderRadius: '0', transformOrigin: `${fx * 100}% ${fy * 100}%` });
+  p.firstChild.style.objectPosition = `${fx * 100}% ${fy * 100}%`;
   vignette(s);
   return { s, update(t) {
     const k = expoOut(t / 0.45);
@@ -171,14 +172,14 @@ function PunchIn(src, fx = 0.5, fy = 0.62) {
 
 function Wall() {
   const s = scene();
-  const COLS = 9, ROWS = 12, TW = 230, TH = 345, G = 24;
+  const COLS = 5, ROWS = 14, TW = 420, TH = 236, G = 24;
   const g = el('div', 'grid', s);
   Object.assign(g.style, { gridTemplateColumns: `repeat(${COLS}, ${TW}px)`, left: '-620px', top: '-560px', transformOrigin: '50% 50%' });
-  const lit = new Set([30, 41, 49]);
+  const lit = new Set([27, 33, 41]);
   const tiles = [];
   for (let i = 0; i < COLS * ROWS; i++) {
     const t = el('div', 'tile', g); t.style.width = TW + 'px'; t.style.height = TH + 'px';
-    const im = img(POSTERS[(i * 7 + Math.floor(i / COLS)) % POSTERS.length], t);
+    const im = img(CAT[(i * 7 + Math.floor(i / COLS) * 3) % CAT.length], t);
     tiles.push({ t, im, lit: lit.has(i) });
   }
   vignette(s);
@@ -196,7 +197,7 @@ function PhoneComments() {
   const s = scene();
   const ph = el('div', 'phone', s);
   const sc = el('div', 'screen', ph);
-  img(POSTERS[3], sc).style.objectPosition = '50% 30%';
+  img(CAT[0], sc).style.objectPosition = '62% 40%';
   el('div', 'ig-top', sc, '<b></b>flmlnk');
   el('div', 'caption', sc, 'Some stories stay with you.<small>There’s a whole film behind this moment.</small>');
   const data = [['AR', 'New viewer', 'Where can I watch this?'], ['TJ', 'New viewer', 'How did I miss this film?'], ['MP', 'New viewer', 'That’s tonight’s movie sorted.']];
@@ -221,13 +222,13 @@ function ChatGrid(opts = {}) {
   const bubble = el('div', 'bubble', s);
   const text = 'Which titles in our catalog are worth another dollar?';
   const g = el('div', 'grid', s);
-  const C = 3, TW = 270, TH = 405;
+  const C = 2, TW = 412, TH = 232;
   Object.assign(g.style, { gridTemplateColumns: `repeat(${C}, ${TW}px)`, left: '117px', top: '820px' });
-  const LIT = [1, 3, 8];
+  const LIT = [1, 4, 8];
   const tiles = [];
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 10; i++) {
     const t = el('div', 'tile', g); t.style.width = TW + 'px'; t.style.height = TH + 'px';
-    const im = img(POSTERS[(i * 5 + 2) % POSTERS.length], t);
+    const im = img(CAT[(i * 5 + 2) % CAT.length], t);
     const bar = el('div', 'bar', t); const ring = el('div', 'ring', t);
     tiles.push({ t, im, bar, ring, lit: LIT.includes(i), i });
   }
@@ -248,24 +249,32 @@ function ChatGrid(opts = {}) {
     g.style.transform = `translateY(${pan - 120 * t}px) scale(${opts.tap ? 1.25 + 0.05 * t : 1})`;
     g.style.transformOrigin = '50% 30%';
     tiles.forEach(({ t: tile, im, bar, ring, lit, i }) => {
-      const st = opts.tap ? (i === 3 ? 0.55 : 99) : 1.05 + LIT.indexOf(i) * 0.12;
+      const st = opts.tap ? (i === 4 ? 0.55 : 99) : 1.05 + LIT.indexOf(i) * 0.12;
       const on = lit ? inv(st, st + 0.25, t) : 0;
       im.style.filter = `grayscale(${1 - on}) brightness(${0.3 + 0.7 * on})`;
       bar.style.transform = `scaleX(${on})`; ring.style.opacity = on;
     });
     if (ripple) {
       const r = inv(0.5, 1.0, t);
-      ripple.style.left = (117 + 270 * 0 + 135 - 80) + 'px'; ripple.style.top = (820 - 260 + 405 * 1 + 120) + 'px';
+      ripple.style.left = (117 + 206 - 80) + 'px'; ripple.style.top = (820 - 260 + 254 * 2 + 116 - 80) + 'px';
       ripple.style.opacity = r > 0 && r < 1 ? 1 - r : 0; ripple.style.transform = `scale(${0.4 + 1.4 * easeOut(r)})`;
     }
   } };
 }
 
+function Still(src, label) {
+  const s = scene();
+  const i = img(src, s); Object.assign(i.style, { position: 'absolute', width: '1080px', height: '1930px', objectFit: 'cover', transformOrigin: '30% 58%' });
+  if (label) el('div', 'ph', s, label);
+  vignette(s);
+  return { s, update(t) { i.style.transform = `scale(${1.02 + 0.06 * t})`; } };
+}
+
 function Handoff() {
   const s = scene();
-  const tv = el('div', 'tv', s); const tvi = img(POSTERS[3], tv);
+  const tv = el('div', 'tv', s); const tvi = img(CAT[0], tv);
   const ph = el('div', 'phone', s); ph.style.transformOrigin = '50% 50%';
-  const sc = el('div', 'screen', ph); const pi = img(POSTERS[3], sc); pi.style.height = '100%';
+  const sc = el('div', 'screen', ph); const pi = img(CAT[0], sc); pi.style.height = '100%'; pi.style.objectPosition = '62% 40%';
   const pill = el('div', 'pill', s, 'Watch the full film ↗');
   vignette(s);
   return { s, update(t) {
@@ -278,7 +287,7 @@ function Handoff() {
     tv.style.opacity = inv(0.45, 0.8, t);
     tv.style.transform = `scale(${lerp(0.82, 1, easeOut(inv(0.45, 1.2, t)))})`;
     tvi.style.transform = `scale(${1.15 + 0.08 * t}) translate(${-20 * t}px, ${-30 * t}px)`;
-    tvi.style.objectPosition = '50% 25%';
+    tvi.style.objectPosition = '50% 50%';
     const c = spring((t - 0.85) * 1.6);
     pill.style.left = '50%'; pill.style.top = '1290px'; pill.style.opacity = t > 0.85 ? 1 : 0;
     pill.style.transform = `translate(-50%,0) scale(${t > 0.85 ? 0.6 + 0.4 * c : 0.6})`;
@@ -300,9 +309,9 @@ function RedMacro(label) {
 
 function Carousel() {
   const s = scene();
-  const order = [0, 1, 2, 4, 5, 3];
-  const W = 600, H = 900, GAP = 60;
-  const ps = order.map(i => { const p = el('div', 'poster', s); img(POSTERS[i], p); Object.assign(p.style, { width: W + 'px', height: H + 'px', top: '510px' }); return p; });
+  const order = [3, 7, 2, 8, 4, 0];
+  const W = 900, H = 506, GAP = 50;
+  const ps = order.map(i => { const p = el('div', 'poster', s); img(POSTERS[i], p); Object.assign(p.style, { width: W + 'px', height: H + 'px', top: '707px' }); return p; });
   vignette(s);
   return { s, update(t, dur) {
     const n = ps.length - 1;
@@ -325,14 +334,14 @@ const SHOTS = [
   [4, Card([[['Old films.']], [['New '], ['believers.', 1]]])],
   [3, Fan()],
   [4, Card([[['Most films were never']], [['given '], ['a real chance.', 1]]])],
-  [1, PunchIn(POSTERS[5], 0.42, 0.66)],
+  [1, PunchIn(CAT[1], 0.72, 0.38)],
   [2, Wall()],
   [4, Card([[['Getting onto a platform']], [['is '], ['not discovery.', 1]]])],
   [4, PhoneComments()],
   [4, Card([[['We help the right people']], [['discover '], ['the whole film.', 1]]])],
   [4, ChatGrid()],
   [4, Card([[['Know which titles']], [['to back.', 1]]])],
-  [4, ChatGrid({ tap: true, label: 'PLACEHOLDER · AI HAND TAPS A TITLE' })],
+  [4, Still(P('hand_keyframe_v1.png'), 'KEYFRAME · ANIMATES AFTER APPROVAL')],
   [4, Card([[['Evidence,']], [['not forecasts.', 1]]])],
   [3, Handoff()],
   [3, RedMacro('PLACEHOLDER · AI RED MACRO')],

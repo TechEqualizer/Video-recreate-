@@ -1,6 +1,6 @@
 # Shot list: FLMLNK × apple-minimal (30 s, 9:16, 126 BPM, 63 beats)
 
-Built in code unless marked AI. Times = beats × 0.476 s. Animatic: `renders/flmlnk_homeview_animatic_v2.mp4`.
+Built in code unless marked AI. Imagery: Dw's original 16:9 catalog key art from Higgsfield (`brands/flmlnk/assets/posters_original/`, 16 fictional titles); public-domain posters removed Nov 26. Times = beats × 0.476 s. Animatic: `renders/flmlnk_homeview_animatic_v2.mp4`.
 
 | # | Start | Beats | Shot | Source |
 | --- | --- | --- | --- | --- |
@@ -41,3 +41,11 @@ Balance: **108.86 credits**. Seedance 2.5 `omni_reference`, 4 s, 9:16, audio off
 | C | AI hand at 1080p; macro in code | 77.5 |
 
 A failed draft is re-prompted at most twice (+12 each); I ask before any re-roll.
+
+## Spend log
+| Date | Item | Credits | Result |
+| --- | --- | --- | --- |
+| 2026-11-26 | Option A approved by Dw | budget 41.5 | |
+| 2026-11-26 | Hand keyframe, gpt_image_2_6 medium 1k ×1 (job 9d9e585b) | 1.0 | `shots/hand_keyframe_v1.png`, passed review |
+| next | Seedance 2.5 draft 480p 4 s (prompt `shots/prompts/shot12_hand.md`) | 12 | awaiting GATE 2 |
+| next | Finalize pick 720p high bitrate | 28 | |

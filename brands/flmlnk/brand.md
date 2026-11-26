@@ -48,7 +48,7 @@ Sources: logo files Dw uploaded (Nov 26) and the public site www.flmlnk.com (rea
 
 ## Casting
 - People appear inside film stills and inside phone screens (viewers commenting). Real hand optional (Dw, with consent).
-- Film imagery: public-domain classics already on the site (Charade, Metropolis, Battleship Potemkin, The General, His Girl Friday, Sherlock Jr.) are safe. The `reed-*` and `featured` stills are partner titles: use only with Dw's confirmation that the rights holder agreed.
+- Film imagery (preferred): Dw's original generated catalog key art in `assets/posters_original/` (16 fictional 16:9 titles, no real people). Fallback: public-domain classics already on the site (Charade, Metropolis, Battleship Potemkin, The General, His Girl Friday, Sherlock Jr.) are safe. The `reed-*` and `featured` stills are partner titles: use only with Dw's confirmation that the rights holder agreed.
 
 ## Truth table (site copy, verbatim; nothing else reaches the screen)
 | Claim / line | Source | OK on screen? |
