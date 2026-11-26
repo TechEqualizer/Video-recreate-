@@ -70,6 +70,7 @@ async function renderSegment(browser, f0, f1, fps, sub, shutter, segPath) {
   fs.writeFileSync(path.join(tmp, 'list.txt'), segs.filter(fs.existsSync).map(s => `file '${s}'`).join('\n'));
   spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', path.join(tmp, 'list.txt'), '-c', 'copy', out], { stdio: 'inherit' });
   segs.forEach(s => fs.existsSync(s) && fs.unlinkSync(s)); fs.unlinkSync(path.join(tmp, 'list.txt')); fs.rmdirSync(tmp);
+  fs.writeFileSync(out.replace(/\.mp4$/, '') + '.cuts.json', JSON.stringify({ duration: dur, fps, cuts }));
   console.log(JSON.stringify({ out, frames: n, fps, sub, shutter, duration: dur, seconds: Math.round((Date.now() - t0) / 1000), cuts }));
   await b.close();
 })();

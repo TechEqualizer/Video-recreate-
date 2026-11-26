@@ -156,7 +156,7 @@ Dw's first animatic "did not feel smooth"; measured jerk was 25% above the refer
 ## 8. Parity: prove it matches
 
 ```bash
-python3 tools/analyze_reference.py projects/<slug>/renders/cut_v1.mp4
+python3 tools/analyze_reference.py projects/<slug>/renders/cut_v1.mp4 --cuts projects/<slug>/renders/cut_v1.cuts.json   # our renders know their exact cuts
 python3 tools/parity_check.py projects/<slug>/style/style_dna.json projects/<slug>/renders/cut_v1.analysis/analysis.json
 python3 tools/side_by_side.py projects/<slug>/refs/a.analysis/contact_sheet.jpg projects/<slug>/renders/cut_v1.analysis/contact_sheet.jpg projects/<slug>/renders/parity_v1.jpg
 ```

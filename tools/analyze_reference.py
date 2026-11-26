@@ -216,13 +216,14 @@ def contact_sheet(paths, labels, out, cols=6):
     sheet.save(out, quality=88)
 
 
-def analyze(v, out, thr, fps):
+def analyze(v, out, thr, fps, known_cuts=None):
     v = Path(v)
     out.mkdir(parents=True, exist_ok=True)
     (out / "shots").mkdir(exist_ok=True)
     meta = probe(v)
     dur = meta["duration_s"]
-    cuts = merge_cuts(detect_cuts(v, thr), detect_cuts_diff(v))
+    # our own renders know their exact cuts; references are detected
+    cuts = [round(c, 3) for c in known_cuts] if known_cuts else merge_cuts(detect_cuts(v, thr), detect_cuts_diff(v))
     frames = decode_frames(v, fps)
     gray = frames.mean(-1)
     diff = np.abs(np.diff(gray, axis=0)).mean(axis=(1, 2)) if len(gray) > 1 else np.zeros(1)
@@ -322,8 +323,12 @@ if __name__ == "__main__":
     ap.add_argument("--out", help="output dir (only with a single video)")
     ap.add_argument("--scene", type=float, default=0.30, help="ffmpeg scene-change threshold")
     ap.add_argument("--fps", type=float, default=6, help="analysis sample rate")
+    ap.add_argument("--cuts", help="exact cut times for our own renders: 'a,b,c' or a JSON file with a 'cuts' list")
     args = ap.parse_args()
     for v in args.video:
         out = Path(args.out) if args.out and len(args.video) == 1 else Path(v).with_suffix("").with_name(Path(v).stem + ".analysis")
-        r = analyze(v, out, args.scene, args.fps)
+        kc = None
+        if args.cuts:
+            kc = json.load(open(args.cuts))["cuts"] if args.cuts.endswith(".json") else [float(x) for x in args.cuts.split(",")]
+        r = analyze(v, out, args.scene, args.fps, kc)
         print(json.dumps(dict(file=v, out=str(out), **r["metrics"], audio=r.get("audio")), separators=(",", ":")))
