@@ -1,0 +1,15 @@
+# media is large and often not ours to redistribute: keep it out of git
+inbox/*
+!inbox/.gitkeep
+*.mp4
+*.mov
+*.m4v
+*.webm
+*.mkv
+*.wav
+*.mp3
+*.m4a
+projects/*/refs/**/shots/
+projects/*/renders/**/shots/
+__pycache__/
+.DS_Store
