@@ -2,7 +2,7 @@
 
 Fused from:
 
-- `homeview_body.mp4` (58.601 s, 16:9): reference for **structure, pacing, camera, sound**, weight 1.0
+- `homeview_body.mp4` (58.601 s, 16:9): reference for **structure, pacing, camera, composition, sound**, weight 1.0
 
 Target: **30.0 s, 9:16**, tempo model **cut-driven**
 
@@ -21,6 +21,8 @@ Target: **30.0 s, 9:16**, tempo model **cut-driven**
 | camera | pct_static | 16.0 | ±8.0 | 16.0 to 16.0 (n=1) |
 | camera | longest_still_s | 2.17 | ±0.651 | 2.17 to 2.17 (n=1) |
 | camera | jerk | 0.131 | ±0.013 | 0.131 to 0.131 (n=1) |
+| composition | subject_fill_pct | 19.0 | ±5.7 | 19.0 to 19.0 (n=1) |
+| composition | pct_frames_filled | 25.9 | ±9.065 | 25.9 to 25.9 (n=1) |
 | sound | lufs | -15.7 | ±2.0 | -15.7 to -15.7 (n=1) |
 | sound | bpm | 125.8 | ±12.58 | 125.8 to 125.8 (n=1) |
 | sound | cuts_on_beat_pct | 32.0 | ±10 | 32.0 to 32.0 (n=1) |

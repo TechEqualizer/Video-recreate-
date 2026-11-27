@@ -29,6 +29,8 @@
   "saturation": 0.067,
   "warmth": 1.4,
   "jerk": 0.131,
+  "subject_fill_pct": 19.0,
+  "pct_frames_filled": 25.9,
   "motion_rel": 0.205,
   "energy_shape": "front-loaded",
   "tempo_model": "cut-driven"

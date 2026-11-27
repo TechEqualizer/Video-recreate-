@@ -16,7 +16,7 @@ const arg = (name, def) => { const i = process.argv.indexOf('--' + name); return
 
 async function openPage(browser) {
   const p = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
-  await p.goto('file://' + path.resolve(__dirname, 'index.html'));
+  await p.goto(arg('page', 'file://' + path.resolve(__dirname, 'index.html')));
   await p.evaluate(() => window.ready());
   return p;
 }
@@ -46,7 +46,7 @@ async function renderSegment(browser, f0, f1, fps, sub, shutter, segPath) {
 (async () => {
   const out = process.argv[2] || 'out.mp4';
   const fps = Number(process.argv[3]) || 60;
-  const b = await chromium.launch();
+  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const stills = arg('stills');
   if (stills) {
     const p = await openPage(b);

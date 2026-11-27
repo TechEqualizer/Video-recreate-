@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: 'DM Sans'; font-weight: 500; src: url(node_modules/@fontsource/dm-sans/files/dm-sans-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-weight: 400; src: url(node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2) format('woff2'); }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #0B0D10; }
+canvas { display: block; }
+</style>
+<script type="importmap">{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const W = 1080, H = 1920;
+window.DURATION = 3.33; window.CUTS = [];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = t => -(Math.cos(Math.PI * clamp(t)) - 1) / 2;
+
+// ---------- renderer ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0B0D10');
+scene.fog = new THREE.Fog('#0B0D10', 9, 20);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.35;
+
+const camera = new THREE.PerspectiveCamera(26, W / H, 0.1, 100);
+
+// ---------- screen UI (drawn in 2D, used as the display texture) ----------
+const SW = 1200, SH = 1700;
+const ui = document.createElement('canvas'); ui.width = SW; ui.height = SH;
+const g = ui.getContext('2d');
+const load = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+async function drawUI() {
+  await document.fonts.load('500 40px "DM Sans"'); await document.fonts.load('400 30px "DM Sans"');
+  const names = ['orbit-nine', 'the-glass-orchard', 'mile-marker-9', 'night-desk', 'cinder-line', 'dust-diamonds', 'engine-hearts', 'hollow-acre'];
+  const imgs = await Promise.all(names.map(n => load('assets/cat/' + n + '.jpg')));
+  const mark = await load('assets/mark_base.png'), wedge = await load('assets/mark_wedge.png');
+  g.fillStyle = '#0E0F12'; g.fillRect(0, 0, SW, SH);
+  // header
+  const mw = 190, mh = mw * 279 / 970; g.drawImage(mark, 70, 78, mw, mh); g.drawImage(wedge, 70, 78, mw, mh);
+  g.fillStyle = 'rgba(243,238,229,.55)'; g.font = '400 30px "DM Sans"'; g.fillText('Your catalog', 70, 200);
+  g.fillStyle = '#F3EEE5'; g.font = '500 54px "DM Sans"'; g.fillText('Which titles to back', 70, 262);
+  // grid
+  const cols = 2, gx = 70, gy = 320, gap = 28, tw = (SW - 2 * gx - gap) / cols, th = tw * 9 / 16;
+  imgs.forEach((im, i) => {
+    const x = gx + (i % cols) * (tw + gap), y = gy + Math.floor(i / cols) * (th + gap + 54);
+    const lit = i === 4;
+    g.save(); rr(x, y, tw, th, 18); g.clip();
+    g.filter = lit ? 'none' : 'grayscale(1) brightness(0.42)';
+    g.drawImage(im, x, y, tw, th); g.filter = 'none'; g.restore();
+    if (lit) { g.lineWidth = 7; g.strokeStyle = '#D5111C'; rr(x + 3.5, y + 3.5, tw - 7, th - 7, 16); g.stroke(); }
+    g.font = '400 26px "DM Sans"'; g.fillStyle = lit ? '#F3EEE5' : 'rgba(243,238,229,.35)';
+    g.fillText(lit ? 'Backed' : 'Watching', x + (lit ? 34 : 0), y + th + 38);
+    if (lit) { g.fillStyle = '#D5111C'; g.beginPath(); g.arc(x + 12, y + th + 29, 9, 0, 7); g.fill(); }
+  });
+}
+
+// ---------- device ----------
+const DW = 3.0, DH = DW * SH / SW + 0.16, DD = 0.11;
+const device = new THREE.Group(); scene.add(device);
+const body = new THREE.Mesh(new RoundedBoxGeometry(DW + 0.16, DH, DD, 6, 0.16),
+  new THREE.MeshPhysicalMaterial({ color: '#2a2b2f', metalness: 1, roughness: 0.32, clearcoat: 0.3, clearcoatRoughness: 0.4 }));
+body.castShadow = true; device.add(body);
+const tex = new THREE.CanvasTexture(ui); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+const screen = new THREE.Mesh(new THREE.PlaneGeometry(DW, DW * SH / SW), new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }));
+screen.position.z = DD / 2 + 0.001; device.add(screen);
+// glass: reflective clear layer catching the studio light
+const glass = new THREE.Mesh(new THREE.PlaneGeometry(DW + 0.12, DH - 0.04),
+  new THREE.MeshPhysicalMaterial({ color: '#000', metalness: 0, roughness: 0.04, transparent: true, opacity: 0.18, clearcoat: 1, envMapIntensity: 2.2 }));
+glass.position.z = DD / 2 + 0.004; device.add(glass);
+device.rotation.set(-0.26, 0.30, 0.0);
+device.position.set(0, DH / 2 * Math.cos(0.26) + 0.02, -0.25);
+
+// floor: seamless, catches a soft contact shadow
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshStandardMaterial({ color: '#111216', roughness: 0.92, metalness: 0 }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = -0.02; floor.receiveShadow = true; scene.add(floor);
+
+// lights: warm key top-left, cool rim behind-right, faint fill
+const key = new THREE.DirectionalLight('#ffd8b0', 2.6); key.position.set(-5, 8, 5); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048); key.shadow.camera.left = -6; key.shadow.camera.right = 6; key.shadow.camera.top = 6; key.shadow.camera.bottom = -6; key.shadow.radius = 6; key.shadow.bias = -0.0004;
+scene.add(key);
+const rim = new THREE.DirectionalLight('#b9c8ff', 1.6); rim.position.set(6, 4, -6); scene.add(rim);
+const fill = new THREE.HemisphereLight('#3a3530', '#050506', 0.5); scene.add(fill);
+
+// ---------- post: depth of field ----------
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bokeh = new BokehPass(scene, camera, { focus: 12, aperture: 0.0022, maxblur: 0.010 });
+composer.addPass(bokeh);
+composer.addPass(new OutputPass());
+
+const target = new THREE.Vector3();
+window.seek = t => {
+  const k = ease(t / window.DURATION);
+  // slow orbit + push: one motivated move, eased both ends
+  const ang = THREE.MathUtils.lerp(-0.38, -0.14, k), dist = THREE.MathUtils.lerp(13.6, 12.4, k), hgt = THREE.MathUtils.lerp(3.4, 3.0, k);
+  camera.position.set(Math.sin(ang) * dist, hgt, Math.cos(ang) * dist);
+  target.set(0.1, 1.95, 0); camera.lookAt(target);
+  // focus on the backed tile (lower-left of screen)
+  const tile = new THREE.Vector3(-0.72, -0.35, 0.06); device.localToWorld(tile);
+  bokeh.uniforms.focus.value = camera.position.distanceTo(tile);
+  composer.render();
+};
+window.ready = async () => { await drawUI(); tex.needsUpdate = true; window.seek(0); return true; };
+</script>
+</body>
+</html>

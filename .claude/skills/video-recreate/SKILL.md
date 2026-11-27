@@ -74,7 +74,7 @@ This writes `analysis.json`, `contact_sheet.jpg`, `sheet_dense.jpg`, a keyframe 
 
 ## 4. Assign roles (the intelligence)
 
-Averaging references blindly produces mush. Decide what each reference is the reference **for**: `structure` (beat order and energy curve), `pacing` (cut rhythm), `camera` (movement and stillness), `look` (light, grade, saturation, warmth), `sound` (loudness, tempo, cuts on the beat).
+Averaging references blindly produces mush. Decide what each reference is the reference **for**: `structure` (beat order and energy curve), `pacing` (cut rhythm), `camera` (movement, stillness, smoothness), `composition` (how much of the frame the subject fills), `look` (light, grade, saturation, warmth), `sound` (loudness, tempo, cuts on the beat).
 
 Defaults, then show Dw one line per reference to confirm:
 - One reference: all roles.
@@ -138,6 +138,18 @@ Hand off to `ad-engine` from its section 5 (realism system) and section 6 (pipel
 - **GATE 2**: keyframes in story order next to the matching reference keyframes.
 
 Every Seedance prompt goes through `higgsfield-seedance-prompt`, carrying the likeness element, product references and the spec's light, grade and lens lines.
+
+## 7a. Craft bar (Apple-grade, not template-grade)
+
+Rhythm metrics passing is not quality. Dw's verdict on FLMLNK v7 (15/15 rhythm pass): "does not look like a 10-year Apple professional". The gaps were framing, materials, light, focus and sound. Rules:
+
+1. **Style frames before animation (hard gate).** Design 4 to 6 hero frames at full resolution, put each next to its matched reference frame, score them, and get Dw's approval before animating anything. Never animate an unapproved look.
+2. **Product = a physical object.** Software is shown on real 3D devices (`build/hero3d.html` pattern: three.js PBR device, studio HDR reflections, warm key + cool rim, contact shadow on a seamless floor, depth of field, motion blur). Flat DOM cards with drop shadows read as a slideshow.
+3. **Fill the frame.** One subject per shot, cropped boldly. `subject_fill_pct` and `pct_frames_filled` are at-least targets (role `composition`).
+4. **One idea per screen.** Design the UI on the device as calm, real product UI with a single hero element; no collages of loud thumbnails.
+5. **Light like a set.** One motivated key, a rim to separate the object, a clean seamless ground. No generic radial glow + vignette.
+6. **Blind critic per shot.** A fresh reviewer scores each shot against its matched reference frame (framing, material, light, focus, type, motion) 1 to 5; anything under 4 is rebuilt before Dw sees it.
+7. **Sound is half the film.** A produced score and a designed sound on every cut and action, not a synthesized temp bed, before calling a cut finished.
 
 ## 7b. Smoothness (coded motion)
 

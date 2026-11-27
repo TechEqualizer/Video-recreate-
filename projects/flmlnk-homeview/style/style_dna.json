@@ -7,6 +7,7 @@
     "structure",
     "pacing",
     "camera",
+    "composition",
     "sound"
    ],
    "weight": 1.0,
@@ -94,6 +95,22 @@
     "max": 0.131,
     "n": 1,
     "tolerance": 0.013
+   }
+  },
+  "composition": {
+   "subject_fill_pct": {
+    "target": 19.0,
+    "min": 19.0,
+    "max": 19.0,
+    "n": 1,
+    "tolerance": 5.7
+   },
+   "pct_frames_filled": {
+    "target": 25.9,
+    "min": 25.9,
+    "max": 25.9,
+    "n": 1,
+    "tolerance": 9.065
    }
   },
   "look": {},

@@ -25,16 +25,17 @@ from pathlib import Path
 
 import numpy as np
 
-ROLES = ["structure", "pacing", "camera", "look", "sound"]
+ROLES = ["structure", "pacing", "camera", "composition", "look", "sound"]
 DIMS = {
     "pacing": ["cuts_per_10s", "median_shot_s", "mean_shot_s", "shortest_shot_s", "longest_shot_s", "first_cut_s"],
     "camera": ["pct_shots_camera_moving", "motion_rel", "pct_static", "longest_still_s", "jerk"],
+    "composition": ["subject_fill_pct", "pct_frames_filled"],
     "look": ["brightness", "contrast", "saturation", "warmth", "motion"],
     "sound": ["lufs", "bpm", "cuts_on_beat_pct"],
     "structure": ["duration_s"],
 }
 # how far the build may drift from a target before the parity check fails it
-TOL = dict(jerk=0.1, motion_rel=0.25, cuts_per_10s=0.2, median_shot_s=0.25, mean_shot_s=0.25, shortest_shot_s=0.5, longest_shot_s=0.3, first_cut_s=0.5,
+TOL = dict(subject_fill_pct=0.3, pct_frames_filled=0.35, jerk=0.1, motion_rel=0.25, cuts_per_10s=0.2, median_shot_s=0.25, mean_shot_s=0.25, shortest_shot_s=0.5, longest_shot_s=0.3, first_cut_s=0.5,
            pct_shots_camera_moving=0.2, motion=0.3, pct_static=0.5, longest_still_s=0.3, brightness=0.15, contrast=0.25,
            saturation=0.25, warmth=None, lufs=None, bpm=0.1, cuts_on_beat_pct=0.25, duration_s=0.15)
 ABS_TOL = dict(warmth=12, lufs=2.0)

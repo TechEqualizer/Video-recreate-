@@ -108,6 +108,18 @@ def jerkiness(v, cuts, rate=30):
     return round(float(np.abs(np.diff(d)).mean() / (d.mean() + 1e-6)), 3)
 
 
+def subject_fill(frames):
+    """Share of the frame the subject occupies: pixels that differ clearly from the background
+    (median of the frame border). Works for light and dark grounds. Apple-style product films
+    fill the frame; floating small objects in a void read as amateur."""
+    g = frames.mean(-1)
+    border = np.concatenate([g[:, :6].reshape(len(g), -1), g[:, -6:].reshape(len(g), -1),
+                             g[:, :, :4].reshape(len(g), -1), g[:, :, -4:].reshape(len(g), -1)], 1)
+    bg = np.median(border, 1)[:, None, None]
+    f = (np.abs(g - bg) > 22).mean(axis=(1, 2))
+    return round(float(np.median(f) * 100), 1), round(float((f > 0.35).mean() * 100), 1)
+
+
 def decode_frames(v, fps):
     raw = sh(["ffmpeg", "-v", "error", "-i", str(v), "-map", "0:v:0", "-vf", f"fps={fps},scale={W}:{H}",
               "-pix_fmt", "rgb24", "-f", "rawvideo", "-"]).stdout
@@ -270,6 +282,7 @@ def analyze(v, out, thr, fps, known_cuts=None):
         **color_stats(frames),
     )
     m["jerk"] = jerkiness(v, cuts)
+    m["subject_fill_pct"], m["pct_frames_filled"] = subject_fill(frames)
     # motion relative to contrast: comparable across bright and dark looks
     m["motion_rel"] = round(m["motion"] / m["contrast"], 3) if m["contrast"] else None
     m["energy_shape"] = ("front-loaded" if m["motion_by_quarter"][0] >= max(m["motion_by_quarter"]) * 0.9 else
