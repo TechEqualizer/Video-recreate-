@@ -10,7 +10,7 @@ Usage: python3 mix.py VIDEO CUTS_JSON OUT [--music-offset 0.023]
 import json, subprocess, sys
 
 video, cuts_json, out = sys.argv[1:4]
-offset = float(sys.argv[sys.argv.index('--music-offset') + 1]) if '--music-offset' in sys.argv else 0.023
+offset = float(sys.argv[sys.argv.index('--music-offset') + 1]) if '--music-offset' in sys.argv else 0.261
 A = 'projects/flmlnk-homeview/audio/'
 d = json.load(open(cuts_json)); cuts = d['cuts']; dur = d.get('duration', 30)
 B = 60 / 126
@@ -27,7 +27,7 @@ for i, t in enumerate(whoosh):
 for i, t in enumerate(taps):
     inputs += ['-i', A + 'sfx_tap.mp3']; ms = int(t * 1000)
     filters.append(f"[{n}:a]volume=0.7,adelay={ms}|{ms}[t{i}]"); labels.append(f"[t{i}]"); n += 1
-filters.append(f"[mus]{''.join(labels)}amix=inputs={1 + len(labels)}:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9[a]")
+filters.append(f"[mus]{''.join(labels)}amix=inputs={1 + len(labels)}:duration=first:normalize=0,loudnorm=I=-14.5:TP=-1.5:LRA=9[a]")
 filters.append("[0:v]noise=alls=3:allf=t,format=yuv420p[v]")
 cmd = ['ffmpeg', '-v', 'error', '-y', *inputs, '-filter_complex', ';'.join(filters), '-map', '[v]', '-map', '[a]',
        '-c:v', 'libx264', '-crf', '17', '-maxrate', '35M', '-bufsize', '70M', '-preset', 'medium', '-g', '30', '-r', '60',
