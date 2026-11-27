@@ -1,0 +1,102 @@
+{
+ "file": "projects/flmlnk-homeview/audio/music_probe.mp4",
+ "duration_s": 32.026,
+ "fps": 30.0,
+ "width": 64,
+ "height": 64,
+ "aspect": "1:1",
+ "has_audio": true,
+ "metrics": {
+  "shot_count": 1,
+  "cuts_per_10s": 0.0,
+  "median_shot_s": 32.03,
+  "mean_shot_s": 32.03,
+  "shortest_shot_s": 32.03,
+  "longest_shot_s": 32.03,
+  "first_cut_s": null,
+  "motion": 0.0,
+  "pct_static": 100,
+  "longest_still_s": 31.83,
+  "pct_shots_camera_moving": 0,
+  "motion_by_quarter": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "brightness": 0.0,
+  "contrast": 0.0,
+  "saturation": 0.0,
+  "warmth": 0.0,
+  "jerk": 0.0,
+  "subject_fill_pct": 0.0,
+  "pct_frames_filled": 0.0,
+  "motion_rel": null,
+  "energy_shape": "front-loaded",
+  "tempo_model": "slow"
+ },
+ "audio": {
+  "lufs": -14.9,
+  "bpm": 125.9,
+  "cuts_on_beat_pct": null,
+  "beat_period_s": 0.476,
+  "beat_phase_s": 0.023
+ },
+ "palette": [
+  {
+   "hex": "#000000",
+   "share": 1.0
+  },
+  {
+   "hex": "#000000",
+   "share": 0.0
+  },
+  {
+   "hex": "#000000",
+   "share": 0.0
+  },
+  {
+   "hex": "#000000",
+   "share": 0.0
+  },
+  {
+   "hex": "#000000",
+   "share": 0.0
+  },
+  {
+   "hex": "#000000",
+   "share": 0.0
+  }
+ ],
+ "cuts_s": [],
+ "shots": [
+  {
+   "n": 1,
+   "start_s": 0.0,
+   "end_s": 32.026,
+   "dur_s": 32.026,
+   "motion": 0.0,
+   "camera_shift_px": 0.0,
+   "camera": "locked",
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 1.0
+    },
+    {
+     "hex": "#000000",
+     "share": 0.0
+    },
+    {
+     "hex": "#000000",
+     "share": 0.0
+    }
+   ],
+   "brightness": 0.0,
+   "contrast": 0.0,
+   "saturation": 0.0,
+   "warmth": 0.0,
+   "keyframe": "shots/001.jpg"
+  }
+ ]
+}

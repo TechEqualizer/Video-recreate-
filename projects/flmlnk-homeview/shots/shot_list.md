@@ -47,5 +47,7 @@ A failed draft is re-prompted at most twice (+12 each); I ask before any re-roll
 | --- | --- | --- | --- |
 | 2026-11-26 | Option A approved by Dw | budget 41.5 | |
 | 2026-11-26 | Hand keyframe, gpt_image_2_6 medium 1k ×1 (job 9d9e585b) | 1.0 | `shots/hand_keyframe_v1.png`, passed review |
-| next | Seedance 2.5 draft 480p 4 s (prompt `shots/prompts/shot12_hand.md`) | 12 | awaiting GATE 2 |
-| next | Finalize pick 720p high bitrate | 28 | |
+| on hold | Seedance hand draft + final (40) | 0 | v8 replaced the hand shot with a 3D tablet macro; revisit if Dw wants a human hand |
+| 2026-11-27 | Music: ElevenLabs Music v2.5, 32 s instrumental ×1 (job b7e13b38) | 4.66 | `audio/music_v1.mp3`, 125.9 BPM, phase +0.023 s |
+| 2026-11-27 | SFX: Mirelo whoosh + tap, 2 s each (jobs 356873af, 6313e22e) | 1.0 | `audio/sfx_*.mp3` |
+| | **Total spent** | **6.66** | |
